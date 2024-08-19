@@ -3,48 +3,25 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function initializeScripts() {
-  await loadGSAP();
-  await loadAdditionalScripts();
+  // Ottieni la classe del body
+  const bodyClass = document.body.className;
+
+  if (bodyClass.includes("home")) {
+    // Carica solo le librerie necessarie per la home page
+    await loadGSAP();
+    await loadScript("https://unpkg.com/split-type");
+    await loadScript("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js");
+  } else if (bodyClass.includes("calendar-page")) {  // Assumi che ci sia una classe specifica per la pagina del calendario
+    await loadScript("https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js");
+  } else {
+    // Carica solo le librerie essenziali per le altre pagine
+    await loadGSAP();
+  }
+
+  // Inizializza le funzioni principali
   initializeMainFunctions();
 }
 
-async function loadGSAP() {
-  const gsapScripts = [
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
-  ];
-  await Promise.all(gsapScripts.map(loadScript));
-}
-
-async function loadAdditionalScripts() {
-  const additionalScripts = [
-    "https://unpkg.com/split-type",
-    "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
-  ];
-
-  const fullCalendarScript =
-    "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js";
-
-  await Promise.all(additionalScripts.map(loadScript));
-
-  if (!window.FullCalendar) {
-    await loadScript(fullCalendarScript);
-  }
-}
-
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = src;
-    script.async = true;
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
 
 function initializeMainFunctions() {
   gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
