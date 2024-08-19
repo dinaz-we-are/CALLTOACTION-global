@@ -1,113 +1,81 @@
-document.addEventListener("DOMContentLoaded", async function () {
-    // Carica subito solo gli script essenziali
-    await loadEssentialScripts();
-
-    // Controlla se GSAP è definito prima di chiamare initializeGSAPAnimations
-    if (typeof gsap !== 'undefined') {
-        initializeGSAPAnimations();
-    } else {
-        console.error("GSAP non è stato caricato correttamente.");
-    }
-
-    // Differisci il resto delle funzioni non essenziali
-    requestIdleCallback(() => {
-        loadDeferredScripts();
-        initializeDeferredFunctions();
-    });
+document.addEventListener("DOMContentLoaded", function () {
+  initializeScripts();
 });
 
-async function loadEssentialScripts() {
-    const essentialScripts = [
-        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
-        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
-        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
-        "https://unpkg.com/split-type",
-        "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
-        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
-        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
-    ];
-    await Promise.all(essentialScripts.map(loadScript));
+async function initializeScripts() {
+  await loadGSAP();
+  await loadAdditionalScripts();
+  initializeMainFunctions();
 }
 
-async function loadDeferredScripts() {
-    const deferredScripts = [    
-        "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"
-        // Aggiungi qui altri script non essenziali
-    ];
-    await Promise.all(deferredScripts.map(loadScript));
+async function loadGSAP() {
+  const gsapScripts = [
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
+  ];
+  await Promise.all(gsapScripts.map(loadScript));
 }
 
-function initializeDeferredFunctions() {
-    // Funzioni non essenziali che possono essere eseguite dopo
-    requestIdleCallback(() => {
-        burgerAnimation();
-        changeLogoColor();
-        initializeHoverAnimations();
-        initializeSimpleHoverTouchAnimations();
-        ctaAnimations();
-        dataColor();
-        info();
-        // Inizializza FullCalendar se necessario
-        if (typeof loadFullCalendar === "function") {
-            loadFullCalendar();
-        }
-    });
+async function loadAdditionalScripts() {
+  const additionalScripts = [
+    "https://unpkg.com/split-type",
+    "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
+  ];
+
+  const fullCalendarScript =
+    "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js";
+
+  await Promise.all(additionalScripts.map(loadScript));
+
+  if (!window.FullCalendar) {
+    await loadScript(fullCalendarScript);
+  }
 }
 
 function loadScript(src) {
-    return new Promise((resolve, reject) => {
-        const script = document.createElement("script");
-        script.src = src;
-        script.async = true;
-        script.onload = resolve;
-        script.onerror = reject;
-        document.head.appendChild(script);
-    });
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
 }
 
-// Funzione per caricare FullCalendar solo se richiesto
-async function loadFullCalendar() {
-    const fullCalendarScript =
-        "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js";
-    await loadScript(fullCalendarScript);
+function initializeMainFunctions() {
+  gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
+  gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
+  gsap.set(".menu-wrapper-row", { width: 0 });
+
+  window.addEventListener("resize", debounce(() => ScrollTrigger.refresh(), 200));
+
+  burgerAnimation();
+  changeLogoColor();
+  dataColor();
+  initializeScrollControlButtons();
+  initializeHoverAnimations();
+  initializeSimpleHoverTouchAnimations();
+  ctaAnimations();
+  info();
+
+  if (typeof pageSpecificFunctions === "function") {
+    pageSpecificFunctions();
+  }
 }
 
 function debounce(func, wait) {
-    let timeout;
-    return function (...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
-    };
+  let timeout;
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
 }
 
-function initializeScrollControlButtons() {
-    // Aggiungi qui la logica per i pulsanti di controllo dello scorrimento
-}
-
-function pageSpecificFunctions() {
-    if (document.body.classList.contains("home-page")) {
-        // Funzioni specifiche per la home page
-        initializeGSAPAnimations();
-        navbarRepo(true);
-        burgerAnimation(true);
-        initializeScrollFlipAnimations();
-        swiperHome();
-
-        // Differisci le altre funzioni non essenziali
-        requestIdleCallback(() => {
-            secondSection(true);
-            createScrollTrigger2();
-            setupCecoStrategy();
-            portfolioInfo();
-            togglePortfolio();
-            videoPause();
-            toggleCeco();
-            changeCSSVariablesOnScroll();
-            animateCecoOnScroll();
-        });
-    }
-}
-
+  
   //
   //Burger
   function burgerAnimation(isHomePage = false) {
