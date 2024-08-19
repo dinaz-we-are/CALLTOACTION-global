@@ -11,17 +11,38 @@ async function initializeScripts() {
     await loadGSAP();
     await loadScript("https://unpkg.com/split-type");
     await loadScript("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js");
-  } else if (bodyClass.includes("calendar-page")) {  // Assumi che ci sia una classe specifica per la pagina del calendario
+  } else if (bodyClass.includes("calendar-page")) {  
     await loadScript("https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js");
   } else {
     // Carica solo le librerie essenziali per le altre pagine
     await loadGSAP();
   }
 
-  // Inizializza le funzioni principali
+  // Inizializza le funzioni principali solo dopo il caricamento delle librerie
   initializeMainFunctions();
 }
 
+async function loadGSAP() {
+  const gsapScripts = [
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
+  ];
+  await Promise.all(gsapScripts.map(loadScript));
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
 
 function initializeMainFunctions() {
   gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
