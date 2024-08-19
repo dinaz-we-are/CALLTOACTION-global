@@ -87,6 +87,37 @@ function debounce(func, wait) {
   };
 }
 
+// Funzioni critiche specifiche della pagina
+function pageSpecificFunctions() {
+  if (document.body.classList.contains("home-page")) {
+    // Funzioni specifiche per la home page
+    initializeGSAPAnimations();
+    navbarRepo(true);
+    burgerAnimation(true);
+    initializeScrollFlipAnimations();
+    swiperHome();
+
+    // Differisci le altre funzioni non essenziali
+    requestIdleCallback(() => {
+      secondSection(true);
+      createScrollTrigger2();
+      setupCecoStrategy();
+      portfolioInfo();
+      togglePortfolio();
+      videoPause();
+      toggleCeco();
+      changeCSSVariablesOnScroll();
+      animateCecoOnScroll();
+    });
+  }
+
+  // Funzioni comuni per altre pagine
+  if (document.body.classList.contains("other-page-class")) {
+    // Inserisci qui le funzioni da eseguire su altre pagine specifiche
+    initializeOtherPageFunctions();
+  }
+}
+
 //Burger
 function burgerAnimation(isHomePage = false) {
   const burgerButton = document.querySelector("#burger");
