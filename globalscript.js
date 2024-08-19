@@ -1,43 +1,53 @@
-document.addEventListener("DOMContentLoaded", function () {
-    initializeScripts();
+document.addEventListener("DOMContentLoaded", async function () {
+    // Carica subito solo gli script essenziali
+    await loadEssentialScripts();
+
+    // Inizializza subito le animazioni critiche
+    initializeGSAPAnimations();
+
+    // Differisci il resto delle funzioni non essenziali
+    requestIdleCallback(() => {
+        loadDeferredScripts();
+        initializeDeferredFunctions();
+    });
 });
 
-async function initializeScripts() {
-    if (document.body.classList.contains("home-page")) {
-        // Carica solo gli script necessari per la home page
-        await loadHomePageScripts();
-    } else {
-        // Carica solo gli script necessari per le altre pagine
-        await loadOtherPageScripts();
-    }
-
-    // Esegui le funzioni critiche specifiche per la pagina
-    if (typeof pageSpecificFunctions === "function") {
-        await pageSpecificFunctions();
-    }
-
-    // Esegui le funzioni non essenziali globali
-    requestIdleCallback(() => {
-        initializeMainFunctions();
-    });
-}
-
-async function loadHomePageScripts() {
-    const homePageScripts = [
+async function loadEssentialScripts() {
+    const essentialScripts = [
         "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
         "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
+        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
         "https://unpkg.com/split-type",
         "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
     ];
-    await Promise.all(homePageScripts.map(loadScript));
+    await Promise.all(essentialScripts.map(loadScript));
 }
 
-async function loadOtherPageScripts() {
-    const otherPageScripts = [
-        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
-        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"
+async function loadDeferredScripts() {
+    const deferredScripts = [        
+        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
+        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
+        "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"  // Aggiunto FullCalendar
+        // Aggiungi qui altri script non essenziali
     ];
-    await Promise.all(otherPageScripts.map(loadScript));
+    await Promise.all(deferredScripts.map(loadScript));
+}
+
+function initializeDeferredFunctions() {
+    // Funzioni non essenziali che possono essere eseguite dopo
+    requestIdleCallback(() => {
+        burgerAnimation();
+        changeLogoColor();
+        initializeHoverAnimations();
+        initializeSimpleHoverTouchAnimations();
+        ctaAnimations();
+        dataColor();
+        info();
+        // Inizializza FullCalendar se necessario
+        if (typeof loadFullCalendar === "function") {
+            loadFullCalendar();
+        }
+    });
 }
 
 function loadScript(src) {
@@ -51,29 +61,11 @@ function loadScript(src) {
     });
 }
 
-function initializeMainFunctions() {
-    // Funzioni non essenziali globali
-    gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
-    gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
-    gsap.set(".menu-wrapper-row", { width: 0 });
-
-    window.addEventListener(
-        "resize",
-        debounce(() => ScrollTrigger.refresh(), 200)
-    );
-
-    initializeScrollControlButtons();
-
-    // Funzioni non critiche che possono essere differite
-    requestIdleCallback(() => {
-        burgerAnimation();
-        changeLogoColor();
-        initializeHoverAnimations();
-        initializeSimpleHoverTouchAnimations();
-        ctaAnimations();
-        dataColor();
-        info();
-    });
+// Funzione per caricare FullCalendar solo se richiesto
+async function loadFullCalendar() {
+    const fullCalendarScript =
+        "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js";
+    await loadScript(fullCalendarScript);
 }
 
 function debounce(func, wait) {
@@ -82,6 +74,34 @@ function debounce(func, wait) {
         clearTimeout(timeout);
         timeout = setTimeout(() => func.apply(this, args), wait);
     };
+}
+
+function initializeScrollControlButtons() {
+    // Aggiungi qui la logica per i pulsanti di controllo dello scorrimento
+}
+
+function pageSpecificFunctions() {
+    if (document.body.classList.contains("home-page")) {
+        // Funzioni specifiche per la home page
+        initializeGSAPAnimations();
+        navbarRepo(true);
+        burgerAnimation(true);
+        initializeScrollFlipAnimations();
+        swiperHome();
+
+        // Differisci le altre funzioni non essenziali
+        requestIdleCallback(() => {
+            secondSection(true);
+            createScrollTrigger2();
+            setupCecoStrategy();
+            portfolioInfo();
+            togglePortfolio();
+            videoPause();
+            toggleCeco();
+            changeCSSVariablesOnScroll();
+            animateCecoOnScroll();
+        });
+    }
 }
 
 
