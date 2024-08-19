@@ -18,16 +18,15 @@ async function loadEssentialScripts() {
         "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
         "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
         "https://unpkg.com/split-type",
-        "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
+        "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
         "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
-        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
+        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js"
     ];
     await Promise.all(essentialScripts.map(loadScript));
 }
 
 async function loadDeferredScripts() {
     const deferredScripts = [    
-        
         "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"  // Aggiunto FullCalendar
         // Aggiungi qui altri script non essenziali
     ];
@@ -44,6 +43,7 @@ function initializeDeferredFunctions() {
         ctaAnimations();
         dataColor();
         info();
+
         // Inizializza FullCalendar se necessario
         if (typeof loadFullCalendar === "function") {
             loadFullCalendar();
@@ -104,6 +104,7 @@ function pageSpecificFunctions() {
         });
     }
 }
+
 
 
 //Burger
