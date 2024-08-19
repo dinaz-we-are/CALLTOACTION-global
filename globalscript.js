@@ -53,18 +53,38 @@ function initializeMainFunctions() {
 
   window.addEventListener("resize", debounce(() => ScrollTrigger.refresh(), 200));
 
+  initializeScrollControlButtons();
+
   burgerAnimation();
   changeLogoColor();
-  dataColor();
-  initializeScrollControlButtons();
+  dataColor();  
   initializeHoverAnimations();
   initializeSimpleHoverTouchAnimations();
   ctaAnimations();
   info();
 
-  if (typeof pageSpecificFunctions === "function") {
-    pageSpecificFunctions();
-  }
+  function pageSpecificFunctions() {
+    if (document.body.classList.contains("home-page")) {
+        // Funzioni specifiche per la home page
+        initializeGSAPAnimations();
+        navbarRepo(true);
+        burgerAnimation(true);
+        initializeScrollFlipAnimations();
+        swiperHome();
+
+        // Differisci le altre funzioni non essenziali
+        requestIdleCallback(() => {
+            secondSection(true);
+            createScrollTrigger2();
+            setupCecoStrategy();
+            portfolioInfo();
+            togglePortfolio();
+            videoPause();
+            toggleCeco();
+            changeCSSVariablesOnScroll();
+            animateCecoOnScroll();
+        });
+    }
 }
 
 function debounce(func, wait) {
