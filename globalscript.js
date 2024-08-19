@@ -2,8 +2,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Carica subito solo gli script essenziali
     await loadEssentialScripts();
 
-    // Inizializza subito le animazioni critiche
-    initializeGSAPAnimations();
+    // Controlla se GSAP è definito prima di chiamare initializeGSAPAnimations
+    if (typeof gsap !== 'undefined') {
+        initializeGSAPAnimations();
+    } else {
+        console.error("GSAP non è stato caricato correttamente.");
+    }
 
     // Differisci il resto delle funzioni non essenziali
     requestIdleCallback(() => {
@@ -16,18 +20,19 @@ async function loadEssentialScripts() {
     const essentialScripts = [
         "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
         "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
+        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
         "https://unpkg.com/split-type",
-        "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
+        "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
+        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
+        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
     ];
     await Promise.all(essentialScripts.map(loadScript));
 }
 
 async function loadDeferredScripts() {
     const deferredScripts = [    
-        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
-        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
-        "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
         "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"
+        // Aggiungi qui altri script non essenziali
     ];
     await Promise.all(deferredScripts.map(loadScript));
 }
@@ -42,6 +47,10 @@ function initializeDeferredFunctions() {
         ctaAnimations();
         dataColor();
         info();
+        // Inizializza FullCalendar se necessario
+        if (typeof loadFullCalendar === "function") {
+            loadFullCalendar();
+        }
     });
 }
 
