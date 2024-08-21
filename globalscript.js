@@ -50,6 +50,22 @@ function initializeMainFunctions() {
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
   gsap.set(".menu-wrapper-row", { width: 0 });
 
+  function changeLogoColor(
+    navLogoColor = "",
+    shapeColor = "",
+    brandArrowColor = "",
+    brandCall = ""
+  ) {
+    gsap.to(":root", {
+      "--navlogo-c": navLogoColor,
+      "--shape-color": shapeColor,
+      "--brand-arrow": brandArrowColor,
+      "--brand-call": brandCall,
+      duration: 0.5,
+      ease: "linear",
+    });
+  }
+
   window.addEventListener(
     "resize",
     debounce(() => ScrollTrigger.refresh(), 200)
