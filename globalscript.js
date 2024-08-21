@@ -3,13 +3,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function initializeScripts() {
-  await loadGSAP(); // Carica solo le librerie GSAP essenziali prima
-  initializeMainFunctions(); // Inizializza le funzioni principali che dipendono da queste librerie
-
-  // Ritarda il caricamento delle librerie non essenziali
-  setTimeout(() => {
-    loadAdditionalScripts();
-  }, 2000);
+  await loadGSAP();
+  await loadAdditionalScripts();
+  initializeMainFunctions();
 }
 
 async function loadGSAP() {
@@ -17,16 +13,16 @@ async function loadGSAP() {
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
-    "https://unpkg.com/split-type",
-    ];
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
+  ];
 
   await Promise.all(gsapScripts.map((src) => loadScript(src)));
 }
 
 async function loadAdditionalScripts() {
   const additionalScripts = [
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",    
+    "https://unpkg.com/split-type",
     "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
   ];
 
