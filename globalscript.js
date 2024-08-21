@@ -821,9 +821,6 @@ const homeCriticalAnimations = {
       console.log("Animazione completata per mobile");
     });
   });
-}
-
-
     //animazione freccia
 
     let arrowAnimation = gsap.to("#arrow", {
