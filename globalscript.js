@@ -23,6 +23,7 @@ async function loadGSAP() {
 async function loadAdditionalScripts() {
   const additionalScripts = [
     "https://unpkg.com/split-type",
+    "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
   ];
 
   await Promise.all(additionalScripts.map((src) => loadScript(src)));
@@ -1110,6 +1111,80 @@ const cecoStretegy = {
   },
 };
 const homeSecondaryAnimations = {
+  swiperHome: function () {
+    var swiper = new Swiper(".swiper-container-home", {
+      slidesPerView: "auto",
+      spaceBetween: 0,
+      loop: true,
+      centeredSlides: true,
+      autoplay: {
+        delay: 500,
+        disableOnInteraction: false,
+      },
+      speed: 500,
+      on: {
+        init: function () {
+          this.update();
+          updateOpacityAndParallax(this);
+        },
+        slideChange: function () {
+          updateOpacityAndParallax(this);
+        },
+      },
+    });
+
+    function updateOpacityAndParallax(swiper) {
+      const slides = swiper.slides;
+      slides.forEach((slide, index) => {
+        slide.style.opacity = index === swiper.activeIndex ? 1 : 0.6;
+      });
+
+      // Applica animazioni GSAP
+      gsap.to(slides[swiper.activeIndex].querySelector(".parallax-bg-img"), {
+        scale: 1.1,
+        opacity: 1,
+        duration: 0.5,
+        ease: "power3.out",
+      });
+
+      // Animazioni parallax per slide precedenti e successive
+      if (slides[swiper.activeIndex - 1]) {
+        gsap.to(
+          slides[swiper.activeIndex - 1].querySelector(".parallax-bg-img"),
+          {
+            scale: 0.5,
+            opacity: 0.6,
+            duration: 0.5,
+            ease: "power3.out",
+          }
+        );
+      }
+      if (slides[swiper.activeIndex + 1]) {
+        gsap.to(
+          slides[swiper.activeIndex + 1].querySelector(".parallax-bg-img"),
+          {
+            scale: 0.5,
+            opacity: 0.6,
+            duration: 0.5,
+            ease: "power3.out",
+          }
+        );
+      }
+    }
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            swiper.autoplay.start();
+          } else {
+            swiper.autoplay.stop();
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(document.querySelector(".swiper-container-home"));
+  },
   createScrollHero: function () {
     ScrollTrigger.create({
       //markers: true,
