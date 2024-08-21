@@ -3,9 +3,13 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function initializeScripts() {
-  await loadGSAP();
-  await loadAdditionalScripts();
-  initializeMainFunctions();
+  await loadGSAP(); // Carica solo le librerie GSAP essenziali prima
+  initializeMainFunctions(); // Inizializza le funzioni principali che dipendono da queste librerie
+
+  // Ritarda il caricamento delle librerie non essenziali
+  requestIdleCallback(() => {
+    loadAdditionalScripts();
+  });
 }
 
 async function loadGSAP() {
@@ -13,15 +17,15 @@ async function loadGSAP() {
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
-  ];
+    ];
 
   await Promise.all(gsapScripts.map((src) => loadScript(src)));
 }
 
 async function loadAdditionalScripts() {
   const additionalScripts = [
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
     "https://unpkg.com/split-type",
     "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
   ];
@@ -32,7 +36,6 @@ async function loadAdditionalScripts() {
 function loadScript(src) {
   return new Promise((resolve, reject) => {
     if (!document.querySelector(`script[src="${src}"]`)) {
-      // Controlla se lo script è già stato caricato
       const script = document.createElement("script");
       script.src = src;
       script.async = true;
@@ -46,7 +49,7 @@ function loadScript(src) {
 }
 
 function initializeMainFunctions() {
-  gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
+  gsap.registerPlugin(ScrollTrigger, Flip); // ScrollToPlugin e Observer è omesso se non è necessario subito
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
   gsap.set(".menu-wrapper-row", { width: 0 });
 
@@ -67,6 +70,7 @@ function debounce(func, wait) {
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
 }
+
 // navbar
 const navbarFunctions = {
   navbarRepo: function (isHomePage = false) {
