@@ -32,6 +32,7 @@ async function loadAdditionalScripts() {
 function loadScript(src) {
   return new Promise((resolve, reject) => {
     if (!document.querySelector(`script[src="${src}"]`)) {
+      // Controlla se lo script è già stato caricato
       const script = document.createElement("script");
       script.src = src;
       script.async = true;
@@ -44,7 +45,7 @@ function loadScript(src) {
   });
 }
 
-function initializeMainFunctions(isHomePage = false) {
+function initializeMainFunctions() {
   gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
   gsap.set(".menu-wrapper-row", { width: 0 });
@@ -54,22 +55,10 @@ function initializeMainFunctions(isHomePage = false) {
     debounce(() => ScrollTrigger.refresh(), 200)
   );
 
-  // Chiamare tutte le funzioni di navbarFunctions
-  Object.keys(navbarFunctions).forEach((functionName) => {
-    if (typeof navbarFunctions[functionName] === "function") {
-      if (functionName === "navbarRepo" || functionName === "burgerAnimation") {
-        navbarFunctions[functionName](isHomePage);
-      } else {
-        navbarFunctions[functionName]();
-      }
-    }
-  });
-
   if (typeof pageSpecificFunctions === "function") {
     pageSpecificFunctions();
   }
 }
-
 
 function debounce(func, wait) {
   let timeout;
@@ -78,7 +67,6 @@ function debounce(func, wait) {
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
 }
-
 // navbar
 const navbarFunctions = {
   navbarRepo: function (isHomePage = false) {
