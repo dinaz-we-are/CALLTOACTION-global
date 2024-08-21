@@ -1,4 +1,8 @@
-  async function initializeScripts() {
+document.addEventListener("DOMContentLoaded", function () {
+  initializeScripts();
+});
+
+async function initializeScripts() {
     await loadGSAP();
     await loadAdditionalScripts();
     initializeMainFunctions(); // Chiama la funzione per inizializzare le funzionalità
