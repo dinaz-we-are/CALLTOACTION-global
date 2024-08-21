@@ -606,10 +606,6 @@ const navbarFunctions = {
 //home
 const homeCriticalAnimations = {
   initializeGSAPAnimations: function () {
-  const mm = gsap.matchMedia();
-
-  mm.add("(min-width: 768px)", () => {
-    // Desktop and tablets
     const tl = gsap.timeline({
       onComplete: () => document.getElementById("cover-div").remove(),
     });
@@ -713,114 +709,7 @@ const homeCriticalAnimations = {
     tl.call(function () {
       console.log("Animazione completata");
     });
-  });
 
-  mm.add("(max-width: 767px)", () => {
-    // Mobile devices
-    const tl = gsap.timeline({
-      onComplete: () => document.getElementById("cover-div").remove(),
-    });
-
-    // Split the text elements
-    let h1Split = new SplitType(".h1-usp", {
-      types: "words",
-      tagName: "span",
-    });
-    let callSplit = new SplitType(".brand-nav-hero", {
-      types: "chars",
-      tagName: "span",
-    });
-    let uspSplit = new SplitType(".usp", {
-      types: "words",
-      tagName: "span",
-    });
-
-    // Animation timeline with faster animations for mobile
-    tl.to("#cover-div", { opacity: 0, duration: 0.1 })
-      .to(".wrapper-hero", { opacity: 1, duration: 0.05 })
-      .fromTo(
-        ".brand-nav-hero .char",
-        { y: "-5rem" },
-        {
-          y: 0,
-          duration: 0.3,
-          ease: "back.out(1.7)",
-          stagger: 0.03,
-        }
-      )
-      .fromTo(
-        ".h1-usp .word",
-        {
-          opacity: 0,
-          y: 30,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.3,
-          ease: "back.out(1.7)",
-          stagger: 0.025,
-        }
-      )
-      .fromTo(
-        ".usp .word",
-        {
-          rotationX: 90,
-          transformOrigin: "bottom center",
-        },
-        {
-          rotationX: 0,
-          duration: 0.4,
-          ease: "back.out(1.7)",
-          stagger: { amount: 0.2 },
-        },
-        "<"
-      )
-      .fromTo(
-        "#nav",
-        { opacity: 0, y: "-3rem" },
-        {
-          delay: 0.3,
-          opacity: 1,
-          y: "0",
-          duration: 0.3,
-          ease: "back.out(1.7)",
-        },
-        "<"
-      )
-      .fromTo(
-        "#big-call",
-        { opacity: 0 },
-        { opacity: 1, ease: "linear", duration: 0.8 },
-        "<"
-      )
-      .fromTo(
-        ".heading-container",
-        { x: "30vw", opacity: 0 },
-        { x: "0", opacity: 1, duration: 0.3, ease: "power2" },
-        "<"
-      )
-      .to(
-        ":root",
-        {
-          duration: 0.8,
-          "--linear-grad1": "#f06",
-          "--linear-grad2": "#e0ff0d",
-          ease: "linear",
-        },
-        "<"
-      )
-      .fromTo(
-        "#arrow",
-        { opacity: 0 },
-        { opacity: 1, duration: 0.8, ease: "bounce" },
-        "<"
-      );
-
-    tl.call(function () {
-      console.log("Animazione completata per mobile");
-    });
-  });
     //animazione freccia
 
     let arrowAnimation = gsap.to("#arrow", {
