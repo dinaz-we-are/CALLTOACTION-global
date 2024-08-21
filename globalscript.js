@@ -7,9 +7,9 @@ async function initializeScripts() {
   initializeMainFunctions(); // Inizializza le funzioni principali che dipendono da queste librerie
 
   // Ritarda il caricamento delle librerie non essenziali
-  requestIdleCallback(() => {
+  setTimeout(() => {
     loadAdditionalScripts();
-  });
+  }, 2000);
 }
 
 async function loadGSAP() {
