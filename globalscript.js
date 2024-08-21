@@ -458,21 +458,6 @@ const navbarFunctions = {
       });
     }
   },
-  changeLogoColor: function (
-    navLogoColor = "",
-    shapeColor = "",
-    brandArrowColor = "",
-    brandCall = ""
-  ) {
-    gsap.to(":root", {
-      "--navlogo-c": navLogoColor,
-      "--shape-color": shapeColor,
-      "--brand-arrow": brandArrowColor,
-      "--brand-call": brandCall,
-      duration: 0.5,
-      ease: "linear",
-    });
-  },
   initializeHoverAnimations: function () {
     const boxes = document.querySelectorAll(".link-wrapper-menu");
 
