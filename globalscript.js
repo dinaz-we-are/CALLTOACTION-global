@@ -44,8 +44,8 @@ function loadScript(src) {
   });
 }
 
-function initializeMainFunctions() {
-  gsap.registerPlugin(ScrollTrigger, Flip); // ScrollToPlugin e Observer è omesso se non è necessario subito
+function initializeMainFunctions(isHomePage = false) {
+  gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
   gsap.set(".menu-wrapper-row", { width: 0 });
 
@@ -54,10 +54,22 @@ function initializeMainFunctions() {
     debounce(() => ScrollTrigger.refresh(), 200)
   );
 
+  // Chiamare tutte le funzioni di navbarFunctions
+  Object.keys(navbarFunctions).forEach((functionName) => {
+    if (typeof navbarFunctions[functionName] === "function") {
+      if (functionName === "navbarRepo" || functionName === "burgerAnimation") {
+        navbarFunctions[functionName](isHomePage);
+      } else {
+        navbarFunctions[functionName]();
+      }
+    }
+  });
+
   if (typeof pageSpecificFunctions === "function") {
     pageSpecificFunctions();
   }
 }
+
 
 function debounce(func, wait) {
   let timeout;
