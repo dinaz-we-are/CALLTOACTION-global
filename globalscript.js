@@ -44,6 +44,7 @@ function loadScript(src) {
   });
 }
 function initializeMainFunctions() {
+  gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
   gsap.set(".menu-wrapper-row", { width: 0 });
 
