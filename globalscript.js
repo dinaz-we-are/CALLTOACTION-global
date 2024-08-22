@@ -34,7 +34,7 @@ function loadScript(src) {
     if (!document.querySelector(`script[src="${src}"]`)) { // Controlla se lo script è già stato caricato
       const script = document.createElement("script");
       script.src = src;
-      script.defer = true; // Usare defer invece di async
+      script.async = true;
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);
