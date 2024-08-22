@@ -1,12 +1,55 @@
+document.addEventListener("DOMContentLoaded", function () {
+  initializeScripts();
+});
+
+async function initializeScripts() {
+  await loadGSAP();
+  await loadAdditionalScripts();
+  initializeMainFunctions();
+}
+
+async function loadGSAP() {
+  const gsapScripts = [
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
+  ];
+  
+  await Promise.all(gsapScripts.map(src => loadScript(src)));
+}
+
+async function loadAdditionalScripts() {
+  const additionalScripts = [
+    "https://unpkg.com/split-type",
+    "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
+  ];
+
+  await Promise.all(additionalScripts.map(src => loadScript(src)));
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    if (!document.querySelector(`script[src="${src}"]`)) { // Controlla se lo script è già stato caricato
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    } else {
+      resolve(); // Risolvi subito se lo script è già stato caricato
+    }
+  });
+}
+
 function initializeMainFunctions() {
   gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
-  
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
   gsap.set(".menu-wrapper-row", { width: 0 });
 
   window.addEventListener("resize", debounce(() => ScrollTrigger.refresh(), 200));  
-  
-  // Inizializzazione funzioni globali
   burgerAnimation();
   changeLogoColor();
   dataColor();
@@ -27,7 +70,7 @@ function debounce(func, wait) {
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
-}
+}  
 
 function initializeGSAPAnimations() {
   const tl = gsap.timeline({
