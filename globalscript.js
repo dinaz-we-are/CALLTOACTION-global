@@ -34,7 +34,7 @@ function loadScript(src) {
     if (!document.querySelector(`script[src="${src}"]`)) { // Controlla se lo script è già stato caricato
       const script = document.createElement("script");
       script.src = src;
-      script.async = true;
+      script.defer = true; // Usare defer invece di async
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);
@@ -43,9 +43,7 @@ function loadScript(src) {
     }
   });
 }
-
 function initializeMainFunctions() {
-  gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
   gsap.set(".menu-wrapper-row", { width: 0 });
 
