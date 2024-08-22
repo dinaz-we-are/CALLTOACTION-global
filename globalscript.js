@@ -9,7 +9,7 @@ async function initializeScripts() {
 
 async function loadGSAP() {
   const gsapScripts = [
-   "https://cdn.jsdelivr.net/gh/dinaz-we-are/gsap@latest/dist/gsapBundle.min.js",
+   "https://cdn.jsdelivr.net/gh/dinaz-we-are/gsap-bundle@latest/dist/gsapBundle.min.js",
   ];
   
   await Promise.all(gsapScripts.map(src => loadScript(src)));
