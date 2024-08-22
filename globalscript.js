@@ -1,22 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
   initializeScripts();
 });
-async function initializeScripts() {
-    await loadGSAP();
+async function initializeScripts() {   
     await loadAdditionalScripts();
     initializeMainFunctions(); // Chiama la funzione per inizializzare le funzionalità
-  }
-
-  async function loadGSAP() {
-    const gsapScripts = [
-      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
-      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
-      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
-      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
-      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
-    ];
-
-    await Promise.all(gsapScripts.map((src) => loadScript(src)));
   }
 
   async function loadAdditionalScripts() {
