@@ -1,10 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () {
   initializeScripts();
 });
-async function initializeScripts() {   
-    await loadAdditionalScripts();
-    initializeMainFunctions(); // Chiama la funzione per inizializzare le funzionalità
-  }
+async function initializeScripts() {
+  await loadGSAP();
+  await loadAdditionalScripts();
+  initializeMainFunctions();
+}
+
+async function loadGSAP() {
+  const gsapScripts = [
+   "https://cdn.jsdelivr.net/gh/dinaz-we-are/gsap@latest/dist/gsapBundle.min.js",
+  ];
+  
+  await Promise.all(gsapScripts.map(src => loadScript(src)));
+}
 
   async function loadAdditionalScripts() {
     const additionalScripts = [
