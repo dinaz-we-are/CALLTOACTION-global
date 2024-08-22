@@ -2,20 +2,11 @@ document.addEventListener("DOMContentLoaded", function () {
   initializeScripts();
 });
 async function initializeScripts() {
-  await loadGSAP();
   await loadAdditionalScripts();
   initializeMainFunctions();
 }
 
-async function loadGSAP() {
-  const gsapScripts = [
-   "https://cdn.jsdelivr.net/gh/dinaz-we-are/gsap-bundle@latest/dist/gsapBundle.min.js",
-  ];
-  
-  await Promise.all(gsapScripts.map(src => loadScript(src)));
-}
-
-  async function loadAdditionalScripts() {
+ async function loadAdditionalScripts() {
     const additionalScripts = [
       "https://unpkg.com/split-type",
       "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
