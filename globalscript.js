@@ -9,7 +9,7 @@ async function initializeScripts() {
  async function loadAdditionalScripts() {
     const additionalScripts = [
       "https://unpkg.com/split-type",
-      "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
+      
     ];
 
     await Promise.all(additionalScripts.map((src) => loadScript(src)));
