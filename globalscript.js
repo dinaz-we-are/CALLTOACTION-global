@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-  initializeScripts();
-});
+    setTimeout(initializeScripts, 100);
+  });
 async function initializeScripts() {
   await loadAdditionalScripts();
   initializeMainFunctions();
@@ -32,7 +32,6 @@ async function initializeScripts() {
 
 function initializeMainFunctions() {
  
-  gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
   gsap.set(".menu-wrapper-row", { width: 0 });
 
